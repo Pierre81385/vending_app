@@ -4,7 +4,8 @@ void main() {
   runApp(
     MaterialApp(debugShowCheckedModeBanner: false, initialRoute: '/', routes: {
       '/': (context) => RouteOne(),
-      '/detail': (context) => RouteTwo(image: '', name: '', price: 0),
+      '/detail': (context) =>
+          RouteTwo(image: '', name: '', price: 0, quantity: 0),
     }),
   );
 }
@@ -67,6 +68,51 @@ class RouteOne extends StatelessWidget {
         "Tostitos",
         4.00,
         50),
+    PhotoItem(
+        "https://www.eatthis.com/wp-content/uploads/sites/4/2021/08/snickers-bar.jpg?quality=82&strip=all",
+        "Snickers",
+        0.50,
+        500),
+    PhotoItem(
+        "https://www.eatthis.com/wp-content/uploads/sites/4/2019/10/cheerios.jpg?quality=82&strip=all",
+        "Cheerios",
+        4.00,
+        350),
+    PhotoItem(
+        "https://www.eatthis.com/wp-content/uploads/sites/4/2019/10/fritos.jpg?quality=82&strip=all",
+        "Fritos",
+        1.00,
+        520),
+    PhotoItem(
+        "https://www.eatthis.com/wp-content/uploads/sites/4/2021/05/pringles-original.jpg?quality=82&strip=all",
+        "Pringles",
+        4.50,
+        250),
+    PhotoItem(
+        "https://www.eatthis.com/wp-content/uploads/sites/4/2020/05/lays-classic.jpg?quality=82&strip=all",
+        "Classic Lays",
+        2.00,
+        70),
+    PhotoItem(
+        "https://www.eatthis.com/wp-content/uploads/sites/4/2019/10/betty-crocker-cake-mix-vanilla.jpg?quality=82&strip=all",
+        "Cake Mix",
+        1.25,
+        150),
+    PhotoItem(
+        "https://www.eatthis.com/wp-content/uploads/sites/4/2019/10/jif-creamy-peanut-butter.jpg?quality=82&strip=all",
+        "Peanut Butter",
+        2.25,
+        80),
+    PhotoItem(
+        "https://www.eatthis.com/wp-content/uploads/sites/4/media/images/ext/260958903/planters-dry-roasted-peanuts.jpg?quality=82&strip=all",
+        "Roasted Peanuts",
+        3.00,
+        200),
+    PhotoItem(
+        "https://www.eatthis.com/wp-content/uploads/sites/4/2019/01/cool-ranch-doritos.jpg?quality=82&strip=all",
+        "Cool Ranch Doritos",
+        1.00,
+        520),
   ];
 
   @override
@@ -84,7 +130,7 @@ class RouteOne extends StatelessWidget {
         itemCount: _items.length,
         itemBuilder: (context, index) {
           // Item rendering
-          return new GestureDetector(
+          return GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
@@ -92,7 +138,8 @@ class RouteOne extends StatelessWidget {
                   builder: (context) => RouteTwo(
                       image: _items[index].image,
                       name: _items[index].name,
-                      price: _items[index].price),
+                      price: _items[index].price,
+                      quantity: _items[index].quantity),
                 ),
               );
             },
@@ -111,15 +158,25 @@ class RouteOne extends StatelessWidget {
   }
 }
 
-class RouteTwo extends StatelessWidget {
+class RouteTwo extends StatefulWidget {
   final String image;
   final String name;
   final num price;
+  final num quantity;
 
   RouteTwo(
-      {Key? key, required this.image, required this.name, required this.price})
+      {Key? key,
+      required this.image,
+      required this.name,
+      required this.price,
+      required this.quantity})
       : super(key: key);
 
+  @override
+  State<RouteTwo> createState() => _RouteTwoState();
+}
+
+class _RouteTwoState extends State<RouteTwo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,7 +190,7 @@ class RouteTwo extends StatelessWidget {
             child: Container(
               width: double.infinity,
               child: Image(
-                image: NetworkImage(image),
+                image: NetworkImage(widget.image),
               ),
             ),
           ),
@@ -141,11 +198,28 @@ class RouteTwo extends StatelessWidget {
             margin: const EdgeInsets.all(20.0),
             child: Center(
               child: Text(
-                name,
+                widget.name,
                 style: TextStyle(fontSize: 40),
               ),
             ),
           ),
+          Container(
+            margin: const EdgeInsets.all(5.0),
+            child: Center(
+              child: Text(
+                "\$${widget.price.toString()}",
+                style: TextStyle(fontSize: 40),
+              ),
+            ),
+          ),
+          Container(
+            child: ElevatedButton(
+              onPressed: () {
+                print('${widget.name} SOLD!!!');
+              },
+              child: Text('BUY'),
+            ),
+          )
         ],
       ),
     );
